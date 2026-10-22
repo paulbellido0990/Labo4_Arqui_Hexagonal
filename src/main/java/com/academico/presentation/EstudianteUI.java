@@ -1,8 +1,6 @@
 package com.academico.presentation;
 import com.academico.application.port.in.EstudianteUseCase;
 import com.academico.domain.model.Estudiante;
-import com.academico.application.service.EstudianteService;
-
 import  java.util.Scanner;
 
 
