@@ -2,16 +2,26 @@ package com.academico.application.service;
 
 import com.academico.application.port.in.CursoUseCase;
 import com.academico.domain.model.Curso;
-import com.academico.infrastructure.adapter.out.persistence.CursoRepository;
+import com.academico.domain.repository.CursoRepository;
+import com.academico.infrastructure.adapter.out.persistence.CursoRepositoryJson;
 
 import java.util.List;
+import java.util.Objects;
 
 public class CursoService implements CursoUseCase {
 
     private final CursoRepository repository;
 
+    public CursoService(CursoRepository repository) {
+        this.repository = Objects.requireNonNull(
+                repository,
+                "El repositorio de cursos no puede ser nulo"
+        );
+    }
+
+    @Deprecated
     public CursoService() {
-        repository = new CursoRepository();
+        this(new CursoRepositoryJson());
     }
 
     @Override
@@ -55,8 +65,9 @@ public class CursoService implements CursoUseCase {
 
         List<Curso> cursos = repository.listar();
 
-        boolean eliminado =
-                cursos.removeIf(c -> c.getId() == id);
+        boolean eliminado = cursos.removeIf(
+                c -> c.getId() == id
+        );
 
         if (eliminado) {
             repository.guardar(cursos);
