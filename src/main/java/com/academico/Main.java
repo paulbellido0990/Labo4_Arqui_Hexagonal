@@ -1,3 +1,4 @@
+
 package com.academico;
 
 import com.academico.application.port.in.CursoUseCase;
@@ -9,7 +10,7 @@ import com.academico.application.service.EstudianteService;
 import com.academico.domain.repository.CursoRepository;
 import com.academico.domain.repository.EstudianteRepository;
 
-import com.academico.infrastructure.adapter.out.persistence.CursoRepositoryJson;
+import com.academico.infrastructure.adapter.out.persistence.CursoRepositoryPostgres;
 import com.academico.infrastructure.adapter.out.persistence.EstudianteRepositoryPostgres;
 
 import com.academico.presentation.CursoUI;
@@ -29,7 +30,7 @@ public class Main {
         EstudianteRepository estudianteRepository =
                 new EstudianteRepositoryPostgres();
 
-        // Puerto de entrada y servicio
+        // Puerto de entrada
         EstudianteUseCase estudianteUseCase =
                 new EstudianteService(estudianteRepository);
 
@@ -42,11 +43,11 @@ public class Main {
         // CASO 2: GESTION DE CURSOS
         // ==========================================
 
-        // Adaptador de salida: JSON
+        // Adaptador de salida: PostgreSQL
         CursoRepository cursoRepository =
-                new CursoRepositoryJson();
+                new CursoRepositoryPostgres();
 
-        // Puerto de entrada y servicio
+        // Puerto de entrada
         CursoUseCase cursoUseCase =
                 new CursoService(cursoRepository);
 
@@ -72,6 +73,7 @@ public class Main {
             System.out.println("1. Gestionar estudiantes");
             System.out.println("2. Gestionar cursos");
             System.out.println("0. Salir");
+
             System.out.print("Seleccione una opcion: ");
 
             opcion = sc.nextInt();
