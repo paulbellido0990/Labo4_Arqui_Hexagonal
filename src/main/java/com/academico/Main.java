@@ -1,28 +1,63 @@
 package com.academico;
-import com.academico.infrastructure.adapter.out.persistence.EstudianteRepositoryJson;
-import com.academico.infrastructure.adapter.out.persistence.EstudianteRepositoryPostgres;
-import com.academico.presentation.EstudianteUI;
 
+import com.academico.application.port.in.CursoUseCase;
+import com.academico.application.port.in.EstudianteUseCase;
+
+import com.academico.application.service.CursoService;
 import com.academico.application.service.EstudianteService;
+
+import com.academico.domain.repository.CursoRepository;
 import com.academico.domain.repository.EstudianteRepository;
 
-import  java.util.Scanner;
+import com.academico.infrastructure.adapter.out.persistence.CursoRepositoryJson;
+import com.academico.infrastructure.adapter.out.persistence.EstudianteRepositoryPostgres;
+
+import com.academico.presentation.CursoUI;
+import com.academico.presentation.EstudianteUI;
+
+import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        // 1. Adaptador de salida: almacena en JSON
-        //EstudianteRepository repository=new EstudianteRepositoryJson();
-        EstudianteRepository repository=new EstudianteRepositoryPostgres();
+        // ==========================================
+        // CASO 1: GESTION DE ESTUDIANTES
+        // ==========================================
+
+        // Adaptador de salida: PostgreSQL
+        EstudianteRepository estudianteRepository =
+                new EstudianteRepositoryPostgres();
+
+        // Puerto de entrada y servicio
+        EstudianteUseCase estudianteUseCase =
+                new EstudianteService(estudianteRepository);
+
+        // Adaptador de entrada: consola
+        EstudianteUI estudianteUI =
+                new EstudianteUI(estudianteUseCase);
 
 
-        //2. Nucleo de la aplicacion: caso de uso
-        EstudianteService service=new EstudianteService(repository);
+        // ==========================================
+        // CASO 2: GESTION DE CURSOS
+        // ==========================================
 
-        // presentacion
-        EstudianteUI estudianteUI=new EstudianteUI(service);
+        // Adaptador de salida: JSON
+        CursoRepository cursoRepository =
+                new CursoRepositoryJson();
 
+        // Puerto de entrada y servicio
+        CursoUseCase cursoUseCase =
+                new CursoService(cursoRepository);
+
+        // Adaptador de entrada: consola
+        CursoUI cursoUI =
+                new CursoUI(cursoUseCase);
+
+
+        // ==========================================
+        // MENU PRINCIPAL
+        // ==========================================
 
         Scanner sc = new Scanner(System.in);
 
@@ -30,13 +65,17 @@ public class Main {
 
         do {
 
-            System.out.println("\n=== SISTEMA DE GESTIÓN ACADÉMICA ===");
+            System.out.println(
+                    "\n=== SISTEMA DE GESTION ACADEMICA ==="
+            );
+
             System.out.println("1. Gestionar estudiantes");
             System.out.println("2. Gestionar cursos");
             System.out.println("0. Salir");
-            System.out.print("Seleccione una opción: ");
+            System.out.print("Seleccione una opcion: ");
 
             opcion = sc.nextInt();
+            sc.nextLine();
 
             switch (opcion) {
 
@@ -45,7 +84,7 @@ public class Main {
                     break;
 
                 case 2:
-                   // CursoUI.mostrarMenu(sc);
+                    cursoUI.mostrarMenu(sc);
                     break;
 
                 case 0:
@@ -53,7 +92,8 @@ public class Main {
                     break;
 
                 default:
-                    System.out.println("Opción no válida.");
+                    System.out.println("Opcion no valida.");
+                    break;
             }
 
         } while (opcion != 0);
