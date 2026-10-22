@@ -1,11 +1,12 @@
 package com.academico.application.service;
 
+import com.academico.application.port.in.CursoUseCase;
 import com.academico.domain.model.Curso;
 import com.academico.infrastructure.adapter.out.persistence.CursoRepository;
 
 import java.util.List;
 
-public class CursoService {
+public class CursoService implements CursoUseCase {
 
     private final CursoRepository repository;
 
@@ -13,6 +14,7 @@ public class CursoService {
         repository = new CursoRepository();
     }
 
+    @Override
     public void registrar(Curso curso) {
 
         List<Curso> cursos = repository.listar();
@@ -22,10 +24,12 @@ public class CursoService {
         repository.guardar(cursos);
     }
 
+    @Override
     public List<Curso> listar() {
         return repository.listar();
     }
 
+    @Override
     public boolean actualizar(Curso curso) {
 
         List<Curso> cursos = repository.listar();
@@ -46,11 +50,13 @@ public class CursoService {
         return false;
     }
 
+    @Override
     public boolean eliminar(int id) {
 
         List<Curso> cursos = repository.listar();
 
-        boolean eliminado = cursos.removeIf(c -> c.getId() == id);
+        boolean eliminado =
+                cursos.removeIf(c -> c.getId() == id);
 
         if (eliminado) {
             repository.guardar(cursos);
