@@ -1,9 +1,9 @@
+
 package com.academico.application.service;
 
 import com.academico.application.port.in.CursoUseCase;
 import com.academico.domain.model.Curso;
 import com.academico.domain.repository.CursoRepository;
-import com.academico.infrastructure.adapter.out.persistence.CursoRepositoryJson;
 
 import java.util.List;
 import java.util.Objects;
@@ -12,6 +12,7 @@ public class CursoService implements CursoUseCase {
 
     private final CursoRepository repository;
 
+    // Inyeccion de dependencias mediante constructor
     public CursoService(CursoRepository repository) {
         this.repository = Objects.requireNonNull(
                 repository,
@@ -19,11 +20,7 @@ public class CursoService implements CursoUseCase {
         );
     }
 
-    @Deprecated
-    public CursoService() {
-        this(new CursoRepositoryJson());
-    }
-
+    // CASO DE USO: Registrar un curso
     @Override
     public void registrar(Curso curso) {
 
@@ -34,11 +31,13 @@ public class CursoService implements CursoUseCase {
         repository.guardar(cursos);
     }
 
+    // CASO DE USO: Listar cursos
     @Override
     public List<Curso> listar() {
         return repository.listar();
     }
 
+    // CASO DE USO: Actualizar curso
     @Override
     public boolean actualizar(Curso curso) {
 
@@ -60,6 +59,7 @@ public class CursoService implements CursoUseCase {
         return false;
     }
 
+    // CASO DE USO: Eliminar curso
     @Override
     public boolean eliminar(int id) {
 
@@ -76,3 +76,4 @@ public class CursoService implements CursoUseCase {
         return eliminado;
     }
 }
+
